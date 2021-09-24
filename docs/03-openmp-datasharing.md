@@ -1,7 +1,7 @@
 ---
 title:  Library routines and data sharing
 author: CSC Training
-date:   2020
+date:   2021
 lang:   en
 ---
 
@@ -10,16 +10,19 @@ lang:   en
 # OpenMP runtime library and environment variables
 
 - OpenMP provides several means to interact with the execution
-  environment. These operations include e.g. 
+  environment. These operations include e.g.
     - Setting the number of threads for parallel regions
     - Requesting the number of CPUs
     - Changing the default scheduling for work-sharing clauses
-- Improves portability of OpenMP programs between different architectures (number of CPUs, etc.)
+- Improves portability of OpenMP programs between different architectures
+  (number of CPUs, etc.)
 
 # Environment variables
 
-- OpenMP standard defines a set of environment variables that all implementations have to support
-- The environment variables are set before the program execution and they are read during program start-up
+- OpenMP standard defines a set of environment variables that all
+  implementations have to support
+- The environment variables are set before the program execution and they are
+  read during program start-up
     - Changing them during the execution has no effect
 - We have already used `OMP_NUM_THREADS`
 
@@ -36,11 +39,12 @@ lang:   en
 
 # Runtime functions
 
-- Runtime functions can be used either to read the settings or to set (override) the values
+- Runtime functions can be used either to read the settings or to set
+  (override) the values
 - Function definitions are in
     - C/C++ header file `omp`.h
     - `omp_lib` Fortran module (`omp_lib`.h header in some implementations)
-- Two useful routines for finding out thread id and number of threads:
+- Two useful routines for finding out thread ID and number of threads:
     - `omp_get_thread_num()`
     - `omp_get_num_threads()`
 
@@ -80,18 +84,18 @@ end program hello
 ```c
 #include <stdio.h>
 #include <omp.h>
-int main(int argc, char argv[]){
+int main(int argc, char argv[]) {
   int omp_rank;
-#pragma omp parallel 
- {
+#pragma omp parallel
+  {
 #ifdef _OPENMP
-  omp_rank = omp_get_thread_num();
+    omp_rank = omp_get_thread_num();
 #else
-  omp_rank = 0;
+    omp_rank = 0;
 #endif
-  printf("Hello world! by thread %d\n", 
-         omp_rank);
- }
+    printf("Hello world! by thread %d\n",
+           omp_rank);
+  }
 }
 ```
 </div>
@@ -101,14 +105,14 @@ int main(int argc, char argv[]){
 
 # How do the threads interact?
 
-- Because of the shared address space threads can interact using _shared
-  variables_
+- Because of the shared address space threads can interact using
+  _shared variables_
 - Threads often need some _private work space_ together with shared variables
     - for example the index variable of a loop
 - If threads write to the same shared variable a **race condition** appears
     - Undefined end result
-- Visibility of different variables is defined using _data-sharing clauses_ in
-  the parallel region definition
+- Visibility of different variables is defined using _data-sharing clauses_
+  in the parallel region definition
 
 # Race condition in Hello world
 
@@ -116,13 +120,14 @@ int main(int argc, char argv[]){
 #include <stdio.h>
 #include <omp.h>
 #include <unistd.h>
-int main(int argc, char argv[]){
+int main(int argc, char argv[]) {
   int omp_rank;
-#pragma omp parallel 
-{
-  omp_rank = omp_get_thread_num();
-  sleep(1);
-  printf("Hello world! by thread %d\n", omp_rank);}
+#pragma omp parallel
+  {
+    omp_rank = omp_get_thread_num();
+    sleep(1);
+    printf("Hello world! by thread %d\n", omp_rank);
+  }
 }
 ```
 - All the threads write out the same thread number
@@ -137,7 +142,7 @@ int main(int argc, char argv[]){
     - Undefined value after parallel region
 - **firstprivate(list)**
     - Same as private variable, but with an initial value that is the same as
-	  the original objects defined outside the parallel region
+      the original objects defined outside the parallel region
 
 
 # omp parallel: data-sharing clauses
@@ -149,7 +154,7 @@ int main(int argc, char argv[]){
     - Sets default for variables to be shared, private or not defined
     - In C/C++ default(private) is not allowed
     - default(none) can be useful for debugging as each variable has to be
-	  defined manually
+      defined manually
 
 # Default behaviour
 
@@ -169,13 +174,14 @@ int main(int argc, char argv[]){
 #include <stdio.h>
 #include <omp.h>
 #include <unistd.h>
-int main(int argc, char argv[]){
+int main(int argc, char argv[]) {
   int omp_rank;
 #pragma omp parallel private(omp_rank)
-{
-  omp_rank = omp_get_thread_num();
-  sleep(1);
-  printf("Hello world! by thread %d\n", omp_rank);}
+  {
+    omp_rank = omp_get_thread_num();
+    sleep(1);
+    printf("Hello world! by thread %d\n", omp_rank);
+  }
 }
 ```
 
@@ -188,14 +194,14 @@ main.c
 int A[5];  // shared
 
 int main(void) {
-    int B[2];  // shared
+  int B[2];  // shared
 #pragma omp parallel
-{
+  {
     float c;  // private
     do_things(B);
     ...
-}
-    return 0;
+  }
+  return 0;
 }
 ```
 </div>
@@ -205,9 +211,9 @@ kernel.c
 extern int A[5];  // shared
 
 void do_things(int *var) {
-    double wrk[10];  // private
-    static int status;
-    ...
+  double wrk[10];  // private
+  static int status;
+  ...
 }
 ```
 </div>
@@ -219,6 +225,6 @@ void do_things(int *var) {
 - Visibility of variables in parallel region can be specified with
   data sharing clauses
     - **private** : each thread works with their own variable
-    - **shared** : all threads can write to and read from a shared variable	
+    - **shared** : all threads can write to and read from a shared variable
 - Race conditions possible when writing to shared variables
 - Avoiding race conditions is key to correctly functioning OpenMP programs

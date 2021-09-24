@@ -1,12 +1,11 @@
 ---
 title:  OpenMP reductions and execution control
 author: CSC Training
-date:   2020
+date:   2021
 lang:   en
 ---
 
 # OpenMP reductions {.section}
-
 
 # Race condition in reduction
 
@@ -45,17 +44,14 @@ $$
   : Performs reduction on the (scalar) variables in list
   : `-`{.ghost}
 
-
-
 - Private reduction variable is created for each thread's partial result
 - Private reduction variable is initialized to operator's initial value
 - After parallel region the reduction operation is applied to private
   variables and result is aggregated to the shared variable
 
 
+# Reduction operators in C/C++
 
-
-# Reduction operators in C/C++ 
 <div class="column">
 
 | Operator | Initial value |
@@ -67,19 +63,22 @@ $$
 | `||`     | `0`           |
 
 </div>
-
 <div class="column">
+
 | Bitwise Operator | Initial value |
 |----------|---------------|
 | `&`      | `~0`          |
 | `|`      | `0`           |
 | `^`      | `0`           |
+
 </div>
+
 
 # Reduction operators in Fortran
 
 <small>
 <div class="column">
+
 | Operator         | Initial value |
 |------------------|---------------|
 | `+`              | `0`           |
@@ -91,17 +90,20 @@ $$
 | `.or.`           | `.false.`     |
 | `.eqv.`          | `.true.`      |
 | `.neqv.`         | `.false.`     |
-</div>
 
+</div>
 <div class="column">
+
 | Bitwise Operator | Initial value |
 |------------------|---------------|
 | `.iand.`           | all bits on   |
 | `.ior.`            | `0`           |
 | `.ieor.`           | `0`           |
+
 </div>
 
 </small>
+
 
 # Race condition avoided with reduction clause
 
@@ -115,7 +117,7 @@ $$
 ```c
 #pragma omp parallel for shared(x,y,n) private(i) reduction(+:asum)
 for(i=0; i < n; i++) {
-    asum = asum + x[i] * y[i];
+  asum = asum + x[i] * y[i];
 }
 ```
 
@@ -124,10 +126,11 @@ for(i=0; i < n; i++) {
 # Execution controls
 
 - Sometimes a part of parallel region should be executed only by the
-  master thread or by a single thread at time 
+  master thread or by a single thread at time
     - IO, initializations, updating global values, etc.
     - Remember the synchronization!
 - OpenMP provides clauses for controlling the execution of code blocks
+
 
 # Failing example
 
@@ -145,37 +148,44 @@ for(i=0; i < n; i++) {
 }
 ```
 
+
 # Execution control constructs
 
 `barrier`
   : `-`{.ghost}
 
-- When a thread reaches a barrier it only continues after all the threads in the same thread team have reached it
-    - Each barrier must be encountered by all threads in a team, or none at all
-    -The sequence of work-sharing regions and barrier regions encountered must be same for all threads in team
+- When a thread reaches a barrier it only continues after all the threads in
+  the same thread team have reached it
+    - Each barrier must be encountered by all threads in a team, or none at
+      all
+    - The sequence of work-sharing regions and barrier regions encountered
+      must be same for all threads in team
 - Implicit barrier at the end of: `do`, `parallel`, `single`, `workshare`
+
 
 # Execution control constructs
 
 `master`
   : `-`{.ghost}
-   
+
 - Specifies a region that should be executed only by the master thread
 - Note that there is no implicit barrier at end
 
 
 `single`
   : `-`{.ghost}
-    
-- Specifies that a regions should be executed only by a single (arbitrary) thread
+
+- Specifies that a regions should be executed only by a single (arbitrary)
+  thread
 - Other threads wait (implicit barrier)
+
 
 # Execution control constructs
 
 `critical[(name)]`
   : `name` Optional name specifies global identifier for critical section
   : `-`{.ghost}
-  
+
 - A section that is executed by only one thread at a time
 - Unnamed critical sections are treated as the same section
 
@@ -185,9 +195,11 @@ for(i=0; i < n; i++) {
 `atomic`
   : `-`{.ghost}
 
-- Strictly limited construct to update a single value, can not be applied to code blocks
+- Strictly limited construct to update a single value, can not be applied to
+  code blocks
 - Only guarantees atomic update, does not protect function calls
 - Can be faster on hardware platforms that support atomic updates
+
 
 # Example: reduction using critical section
 
@@ -227,15 +239,17 @@ int total = 0;
 }
 ```
 
+
 # Summary
 
-- Several parallel reduction operators available via `reduction` clause 
+- Several parallel reduction operators available via `reduction` clause
 - OpenMP has many synchronization pragmas
     - Critical sections
     - Atomic
     - Single and Master
     - And some that we did not present
-	
+
+
 # OpenMP programming best practices
 
 - Maximise parallel regions
@@ -276,6 +290,7 @@ int total = 0;
 - More advanced ways to reduce synchronisation overhead with `nowait` and
   `flush`
 - Support for attached devices with `target`
+
 
 # Web resources
 

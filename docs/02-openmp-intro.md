@@ -1,49 +1,55 @@
 ---
 title:  Introduction to OpenMP
 author: CSC Training
-date:   2020
+date:   2021
 lang:   en
 ---
 
 
 # Processes and threads
 
-![](img/processes-threads.svg){.center width=90%}
+![](img/processes-threads.png)
 
 <div class="column">
+
 ## Process
 
   - Independent execution units
   - Have their own state information and *own memory* address space
-</div>
 
+</div>
 <div class="column">
+
 ## Thread
 
   - A single process may contain multiple threads
   - Have their own state information, but *share* the *same memory*
     address space
+
 </div>
 
 
 # Processes and threads
 
-![](img/processes-threads-highlight-threads.svg){.center width=90%}
+![](img/processes-threads-highlight-threads.png)
 
 <div class="column">
+
 ## Process
 
   - Long-lived: spawned when parallel program started, killed when
     program is finished
   - Explicit communication between processes
-</div>
 
+</div>
 <div class="column">
+
 ## Thread
 
   - Short-lived: created when entering a parallel region, destroyed
     (joined) when region ends
   - Communication through shared memory
+
 </div>
 
 
@@ -78,61 +84,68 @@ lang:   en
 
 # Three components of OpenMP
 
-- Compiler directives, i.e. language extensions, for shared memory
-  parallelization
+- Compiler directives, i.e. language extensions
+    - Expresses shared memory parallelization
+    - Preceded by sentinel, can compile serial version
+
 - Runtime library routines (Intel: libiomp5, GNU: libgomp)
-    - Conditional compilation to build serial version
+    - Small number of library functions
+    - Can be discarded in serial version via conditional compiling
+
 - Environment variables
     - Specify the number of threads, thread affinity etc.
 
 
 # OpenMP directives
 
-- OpenMP directives consist of "sentinel", followed by the directive
+- OpenMP directives consist of a *sentinel*, followed by the directive
   name and optional clauses
-- C/C++: 
+- C/C++:
 ```C
 #pragma omp directive [clauses]
 ```
-- Fortran: 
+- Fortran:
 ```Fortran
 !$omp directive [clauses]
 ```
+
 - Directives are ignored when code is compiled without OpenMP support
 
 
 # Compiling an OpenMP program
 
-- Compilers that support OpenMP usually require an option that enables the
-  feature
+- Compilers that support OpenMP usually require an option (flag) that
+  enables the feature
     - GNU: `-fopenmp`
     - Intel: `-qopenmp`
     - Cray: `-h omp`
         * OpenMP enabled by default, -h noomp disables
     - PGI: `-mp[=nonuma,align,allcores,bind]`
-    - Without these options a serial version is compiled!
 
 
 # Parallel construct
 
-<div class=column>
-- Defines a parallel region
+<div class="column">
+
+- Defines a *parallel region*
     - C/C++:
     ```C
-	#pragma omp parallel [clauses]
-	   structured block
-	```
+    #pragma omp parallel [clauses]
+       structured block
+    ```
     - Fortran:
     ```fortran
-	!$omp parallel [clauses]
-	   structured block
-	!$omp end parallel
-	```
-- Prior to region only one thread, master
-- Creates a team of threads: master+slaves
+    !$omp parallel [clauses]
+       structured block
+    !$omp end parallel
+    ```
+- Prior to it only one thread (main)
+- Creates a team of threads: main + workers
 - Barrier at the end of the block
+
 </div>
-<div class=column>
+<div class="column">
+
 SPMD: Single Program Multiple Data
 ![](img/omp-parallel.png)
 
@@ -141,51 +154,51 @@ SPMD: Single Program Multiple Data
 
 # Example: "Hello world" with OpenMP
 
-<div class=column>
+<div class="column">
 ```fortran
 program omp_hello
 
-   write(*,*) "Obey your master!"
+   write(*,*) "Hello world! -main"
 !$omp parallel
-   write(*,*) "Slave to the grind"
+   write(*,*) ".. worker reporting for duty."
 !$omp end parallel
-   write(*,*) "Back with master"
+   write(*,*) "Over and out! -main"
 
 end program omp_hello
 ```
 ```bash
 > gfortran -fopenmp omp_hello.F90 -o omp
 > OMP_NUM_THREADS=3 ./omp
- Obey your master!
- Slave to the grind
- Slave to the grind
- Slave to the grind
- Back with master
+ Hello world! -main
+ .. worker reporting for duty.
+ .. worker reporting for duty.
+ .. worker reporting for duty.
+ Over and out! -main
 ```
 </div>
 
-<div class=column>
+<div class="column">
 ```c
 #include <stdio.h>
 
-int main(int argc, char* argv[]) 
+int main(int argc, char* argv[])
 {
-   printf("Obey your master!\n");
+  printf("Hello world! -main\n");
 #pragma omp parallel
- {
-   printf("Slave to the grind\n");
- }
-   printf("Back with master\n");
+  {
+    printf(".. worker reporting for duty.\n");
+  }
+  printf("Over and out! -main\n");
 }
 ```
 ```bash
 > gcc -fopenmp omp_hello.c -o omp
 > OMP_NUM_THREADS=3 ./omp
-Obey your master!
-Slave to the grind
-Slave to the grind
-Slave to the grind
-Back with master
+Hello world! -main
+.. worker reporting for duty.
+.. worker reporting for duty.
+.. worker reporting for duty.
+Over and out! -main
 ```
 </div>
 
@@ -199,7 +212,7 @@ Back with master
     - Sections construct
     - Task construct
     - Workshare construct (Fortran only)
-- Thread id can be queried and used for distributing work manually
+- Thread ID can be queried and used for distributing work manually
   (similar to MPI rank)
 
 # Loop construct
@@ -216,7 +229,8 @@ Back with master
 ...
 !$omp end do
 ```
-- in C/C++ limited only to "canonical" for-loops. Iterator base loops are also possible in C++
+- in C/C++ limited only to "canonical" for-loops. Iterator base loops are
+  also possible in C++
 - Construct must reside inside a parallel region
     - Combined construct with omp parallel: \
           `#pragma omp parallel for` / `!$omp parallel do`
@@ -237,9 +251,9 @@ Back with master
 ```c
 #pragma omp parallel
 {
-    #pragma omp for
-    for (i=0; i < n; i++)
-        z[i] = x[i] + y[i];
+  #pragma omp for
+  for (i=0; i < n; i++)
+    z[i] = x[i] + y[i];
 }
 ```
 
@@ -247,6 +261,6 @@ Back with master
 # Summary
 
 - OpenMP can be used with compiler directives
-    - Neglected when code is build without OpenMP
+    - Ignored when code is build without OpenMP
 - Threads are launched within **parallel** regions
 - `for`/`do` loops can be parallelized easily with loop construct
