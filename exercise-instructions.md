@@ -139,6 +139,13 @@ salloc --nodes=1 --ntasks-per-node=2 --cpus-per-task=4 --account=project_2000745
 ddt srun ./buggy
 ```
 
+By default, DDT sets the initial breakpoint at `MPI_Init`. For debugging plain OpenMP programs, set also the following environment variables before starting the debugger:
+
+```
+export ALLINEA_MPI_INIT=main
+export ALLINEA_HOLD_MPI_INIT=1
+```
+
 For smoother GUI performance, we recommend using [NoMachine remote
 desktop](https://docs.csc.fi/support/tutorials/nomachine-usage/) to
 connect to Mahti.
