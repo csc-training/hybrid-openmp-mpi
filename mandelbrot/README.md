@@ -1,4 +1,4 @@
-## Bonus: Using OpenMP tasks for dynamic parallelization ##
+## Using OpenMP tasks for dynamic parallelization 
 
 Mandelbrot set of complex numbers can be presented as two dimensional
 fractal image. The computation of the pixel values is relatively time
