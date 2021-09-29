@@ -33,6 +33,7 @@ Exercise material and model answers for the CSC course "Hybrid CPU programming w
 ### OpenMP tasks
 
 - [Simple tasking](simple-tasks/)
-- [Parallelizing Mandelbrot with tasks](mandelbrot)
-- 
+- [Parallelizing Mandelbrot with tasks](mandelbrot/)
+- [Parallel Fibonacci](fibonacci/)
+- [Task dependencies in matrix multiplication](matmul)
 
