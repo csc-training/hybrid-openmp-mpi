@@ -35,5 +35,6 @@ Exercise material and model answers for the CSC course "Hybrid CPU programming w
 - [Simple tasking](simple-tasks/)
 - [Parallelizing Mandelbrot with tasks](mandelbrot/)
 - [Parallel Fibonacci](fibonacci/)
-- [Task dependencies in matrix multiplication](matmul)
+- [Task dependencies in matrix multiplication](matmul/)
+- [(Bonus) Parallel Sudoku](sudoku/)
 
