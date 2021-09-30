@@ -32,6 +32,7 @@ contains
     type(field), intent(out) :: to_field
 
     ! Consistency checks
+    !$omp single
     if (.not.allocated(from_field%data)) then
        write (*,*) "Can not copy from a field without allocated data"
        stop
@@ -45,8 +46,11 @@ contains
        print *, shape(from_field%data), shape(to_field%data)
        stop
     end if
+    !$omp end single
 
+    !$omp workshare
     to_field%data = from_field%data
+    !$omp end workshare
 
     to_field%nx = from_field%nx
     to_field%ny = from_field%ny

@@ -55,15 +55,21 @@ void initialize(int argc, char *argv[], Field& current,
     }
 
     if (read_file) {
+        #pragma omp single
+        {
         if (0 == parallel.rank)
             std::cout << "Reading input from " + input_file << std::endl;
         read_field(current, input_file, parallel);
+        }
     } else {
+        #pragma omp single
         current.setup(rows, cols, parallel);
+
         current.generate(parallel);
     }
 
     // copy "current" field also to "previous"
+    #pragma omp single
     previous = current;
 
 }

@@ -1,5 +1,5 @@
 ifeq ($(COMP),)
-COMP=intel
+COMP=gnu
 endif
 
 COMMONDIR=../common
@@ -20,7 +20,7 @@ LDFLAGS=
 LIBS=-lpng
 endif
 
-EXE=heat_mpi
+EXE=heat_hybrid
 OBJS=main.o heat.o core.o setup.o io.o utilities.o
 OBJS_PNG=$(COMMONDIR)/pngwriter.o
 

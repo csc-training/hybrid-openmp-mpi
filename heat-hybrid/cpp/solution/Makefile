@@ -1,5 +1,5 @@
 ifeq ($(COMP),)
-COMP=intel
+COMP=gnu
 endif
 
 COMMONDIR=../../common
@@ -7,7 +7,7 @@ COMMONDIR=../../common
 ifeq ($(COMP),gnu)
 CXX=mpicxx
 CC=gcc
-CCFLAGS=-g -O3 -march=native -Wall -I$(COMMONDIR) -DNDEBUG
+CCFLAGS=-g -O3 -march=native -Wall -I$(COMMONDIR) -DNDEBUG -fopenmp
 LDFLAGS=
 LIBS=-lpng
 endif
@@ -15,12 +15,12 @@ endif
 ifeq ($(COMP),intel)
 CXX=mpicxx
 CC=icc
-CCFLAGS=-g -O3 -xHost -I$(COMMONDIR) -DNDEBUG
+CCFLAGS=-g -O3 -xHost -I$(COMMONDIR) -DNDEBUG -fopenmp
 LDFLAGS=
 LIBS=-lpng
 endif
 
-EXE=heat_mpi
+EXE=heat_hybrid
 OBJS=main.o heat.o core.o setup.o io.o utilities.o
 OBJS_PNG=$(COMMONDIR)/pngwriter.o
 

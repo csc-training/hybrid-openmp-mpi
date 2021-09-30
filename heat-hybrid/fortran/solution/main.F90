@@ -6,6 +6,9 @@ program heat_solve
   use io
   use setup
   use utilities
+#ifdef _OPENMP
+  use omp_lib
+#endif
 
   implicit none
 
@@ -17,7 +20,9 @@ program heat_solve
   integer, parameter :: image_interval = 100 ! Image output interval
 
   type(parallel_data) :: parallelization
-  integer :: ierr
+  integer :: num_threads = 1
+
+  integer :: ierr, provided
 
   integer :: iter
 
@@ -25,11 +30,24 @@ program heat_solve
 
   real(kind=dp) :: start, stop ! Timers
 
-  call mpi_init(ierr)
+  call mpi_init_thread(MPI_THREAD_SERIALIZED, provided, ierr)
+  if (provided < MPI_THREAD_SERIALIZED) then
+    write(*,*) "MPI_THREAD_SERIALIZED thread support level required"
+    call mpi_abort(MPI_COMM_WORLD, 5)
+  end if
+
+!$omp parallel private(iter)
+
+#ifdef _OPENMP
+  !$omp master
+  num_threads = omp_get_num_threads()
+  !$omp end master
+#endif
 
   call initialize(current, previous, nsteps, parallelization)
 
   ! Draw the picture of the initial state
+  !$omp single
   call write_field(current, 0, parallelization)
 
   average_temp = average(current, parallelization)
@@ -37,6 +55,7 @@ program heat_solve
      write(*,'(A, I5, A, I5, A, I5)') 'Simulation grid: ', current%nx_full, ' x ', & 
           & current%ny_full, ' time steps: ', nsteps
      write(*,'(A, I5)') 'MPI processes: ', parallelization%size
+     write(*,'(A, I5)') 'OpenMP threads: ', num_threads
      write(*,'(A,F9.6)') 'Average temperature at start: ', average_temp
   end if
 
@@ -48,15 +67,22 @@ program heat_solve
   ! image_interval steps
 
   start =  mpi_wtime()
+  !$omp end single
 
   do iter = 1, nsteps
+     !$omp single
      call exchange(previous, parallelization)
+     !$omp end single
      call evolve(current, previous, a, dt)
+     !$omp single
      if (mod(iter, image_interval) == 0) then
         call write_field(current, iter, parallelization)
      end if
      call swap_fields(current, previous)
+     !$omp end single
   end do
+
+!$omp end parallel
 
   stop = mpi_wtime()
 

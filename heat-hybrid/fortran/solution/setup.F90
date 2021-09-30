@@ -51,12 +51,16 @@ contains
 
     ! Initialize the fields according the command line arguments
     if (using_input_file) then
+       !$omp single
        call read_field(previous, input_file, parallel)
+       !$omp end single
        call copy_fields(previous, current)
     else
+       !$omp single
        call parallel_setup(parallel, rows, cols)
        call set_field_dimensions(previous, rows, cols, parallel)
        call set_field_dimensions(current, rows, cols, parallel)
+       !$omp end single
        call generate_field(previous, parallel)
        call copy_fields(previous, current)
     end if
@@ -77,11 +81,14 @@ contains
     integer :: i, j, ds2
 
     ! The arrays for field contain also a halo region
+    !$omp single
     allocate(field0%data(0:field0%nx+1, 0:field0%ny+1))
+    !$omp end single
 
     ! Square of the disk radius
     radius2 = (field0%nx_full / 6.0_dp)**2
 
+    !$omp do private(i, j, ds2)
     do j = 0, field0%ny + 1
        do i = 0, field0%nx + 1
           ds2 = int((i - field0%nx_full / 2.0_dp + 1)**2 + &
@@ -93,16 +100,23 @@ contains
           end if
        end do
     end do
+    !$omp end do
 
     ! Boundary conditions
     if (parallel % rank == 0) then
+       !$omp workshare
        field0%data(:,0) = 20.0_dp
+       !$omp end workshare
     end if
     if (parallel % rank == parallel%size - 1) then
+       !$omp workshare
        field0%data(:,field0%ny+1) = 70.0_dp
+       !$omp end workshare
     end if
+    !$omp workshare
     field0%data(0,:) = 85.0_dp
     field0%data(field0%nx+1,:) = 5.0_dp
+    !$omp end workshare
 
   end subroutine generate_field
 

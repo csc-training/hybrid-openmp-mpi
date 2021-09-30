@@ -37,6 +37,7 @@ void evolve(Field& curr, const Field& prev, const double a, const double dt)
   // Determine the temperature field at next time step
   // As we have fixed boundary conditions, the outermost gridpoints
   // are not updated.
+  #pragma omp for
   for (int i = 1; i < curr.nx + 1; i++) {
     for (int j = 1; j < curr.ny + 1; j++) {
             curr(i, j) = prev(i, j) + a * dt * (
