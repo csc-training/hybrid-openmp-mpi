@@ -14,5 +14,7 @@ single parallel region within the main routine.
   3. Parallelize the main computational routine
      `evolve()` in [cpp/core.cpp](cpp/core.cpp) or [fortran/core.F90](fortran/core.F90). 
 
+Note that execution controls might be needed in the main routine and in initialization.
+
 To build the code, please use the provided `Makefile` (by typing `make`). By default, GNU
 compiler is used, in order to use Intel compiler type `make COMP=intel`.
