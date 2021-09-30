@@ -11,6 +11,10 @@ Exercise material and model answers for the CSC course "Hybrid CPU programming w
 - [Hello world](omp-hello/)
 - [Work sharing and vector addition](work-sharing/)
 
+### Library functions
+
+- [OpenMP library functions](lib-funcs/)
+
 ### Data sharing
 
 - [Data sharing and parallel regions](data-sharing/)
@@ -20,7 +24,6 @@ Exercise material and model answers for the CSC course "Hybrid CPU programming w
 ### Reductions and execution controls
 
 - [Reduction and critical](reduction/)
-- [OpenMP library functions](lib-funcs/)
 - [(Bonus) Coarse grain parallelization of heat equation](heat-equation/README_coarse.md)
 
 ### Hybrid MPI+OpenMP programming
