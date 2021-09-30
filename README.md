@@ -9,11 +9,11 @@ Exercise material and model answers for the CSC course "Hybrid CPU programming w
 ### Getting started with OpenMP
 
 - [Hello world](omp-hello/)
-- [Data sharing and parallel regions](data-sharing/)
-
-### Work sharing
-
 - [Work sharing and vector addition](work-sharing/)
+
+### Data sharing
+
+- [Data sharing and parallel regions](data-sharing/)
 - [Race condition in parallel sum](race-condition/)
 - [(Bonus) Fine grain parallelization of heat equation](heat-equation/README_fine.md)
 
