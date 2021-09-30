@@ -19,13 +19,11 @@ is handled by the master process. Your tasks are thus:
 
 ### Coarse-grained OpenMP parallelization
 
-Now, there is only one parallel region (within the main routine) and all the threads participate 
-in the halo exchange.
+Now, there is only one parallel region (within the main routine), however, MPI communication 
+in the halo exchange is still done only by one thread (but not necessarily master).
 
 1. Initialize MPI with appropriate thread safety level
 2. Insert apprioriate OpenMP directives thoughtout the code
-3. Implement the thread specific communication in the `exchange()` routine in [cpp/core.cpp](cpp/core.cpp) or [fortran/core.F90](fortran/core.F90).
-
 
 To build the code, please use the provided `Makefile` (by typing `make`). By default, GNU 
 compiler is used, in order to use Intel compiler type `make COMP=intel`.
