@@ -280,18 +280,6 @@ int total = 0;
 ![](img/omp-summary.png)
 
 
-# Things that we did not cover
-
-- Adjusting scheduling of `for` / `do` work-sharing constructs
-- Other work-sharing constructs:
-    - `workshare`, `sections`, `simd`
-    - `teams`, `distribute`
-- Task based parallelisation with `task` consturct
-- More advanced ways to reduce synchronisation overhead with `nowait` and
-  `flush`
-- Support for attached devices with `target`
-
-
 # Web resources
 
 - OpenMP homepage: <http://openmp.org/>

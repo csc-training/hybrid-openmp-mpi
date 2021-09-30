@@ -257,6 +257,63 @@ Over and out! -main
 }
 ```
 
+# Workshare directive (Fortran only)
+
+- In Fortran many array operations can be done conveniently with array
+  syntax, *i.e.* without explicit loops
+    - Array assignments, forall and where statements *etc.*
+- The `workshare` directive divides the execution of the enclosed structured
+  block into separate units of work, each of which is executed only once
+
+```fortran
+real :: a(n,n), b(n,n), c(n,n) d(n,n)
+...
+!$omp parallel
+  !$omp workshare
+     c = a * b
+     d = a + b
+  !$omp end workshare
+!$omp end parallel
+```
+
+- Note that performance may be bad in some compilers, in particular with Intel
+
+# Sections construct
+
+- Sections construct enables parallel execution of independent tasks
+- Each section is run by a single thread
+
+<div class=column>
+```C
+#pragma omp sections [clauses]
+{
+  #pragma omp section
+  task1()
+  #pragma omp section
+  task2()
+  #pragma omp section
+  task3()
+}
+```
+</div>
+<div class=column>
+```fortran
+!$omp sections [clauses]
+  !$omp section
+  call task1()
+  !$omp section
+  call task2()
+  !$omp section
+  call task3()
+!$omp end sections
+```
+</div>
+
+- If nested parallelism is supported, "tasks" can in principle contain
+  parallel regions
+    - Performance may not be optimal
+- Often, OpenMP **task** construct is more suitable
+
 
 # Summary
 
