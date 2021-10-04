@@ -61,14 +61,14 @@ lang:   en
 - A collection of _compiler directives_ and _library routines_ ,
   together with a _runtime system_, for
   **multi-threaded**, **shared-memory parallelization**
-- Fortran 77/9X/03 and C/C++ are supported
-- Latest version of the standard is 5.0 (November 2018)
+- Fortran 77/9X/0X and C/C++ are supported
+- Latest version of the standard is 5.1 (November 2020)
     - Full support for accelerators (GPUs)
     - Support latest versions of C, C++ and Fortran
     - Support for a fully descriptive loop construct
     - and more
 - Compiler support for 5.0 is still incomplete
-- This course does not discuss any 5.0 specific features
+- This course discusses mostly features present in < 4.5
 
 
 # Why would you want to learn OpenMP?
