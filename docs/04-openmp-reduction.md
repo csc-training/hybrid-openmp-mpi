@@ -220,6 +220,15 @@ for(i=0; i < n; i++) {
 
 # Example: initialization and output (with bugs!)
 
+<!-- Presentation tip: in the following code the barrier is in wrong
+     place. There is no implicit barrier in critical, thus "master"
+     may print "total" before all partial sums are added.
+
+     Can be presented with live coding, demos/reduction.c contains correct
+     code (modify first for a buggy one). Buggy code might require multiple 
+     runs for the error to appear
+-->
+
 ```c
 int total = 0;
 #pragma omp parallel shared(total) private(sum,new)
