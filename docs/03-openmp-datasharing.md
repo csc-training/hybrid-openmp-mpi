@@ -62,6 +62,10 @@ lang:   en
 
 # Example: Hello world with OpenMP
 
+<!-- Presentation suggestion: live coding, first without #ifdef
+     (compilation without -fopenmp fails) and then with #ifdef 
+-->
+
 <div class=column>
 ```fortran
 program hello
@@ -115,6 +119,8 @@ int main(int argc, char argv[]) {
   in the parallel region definition
 
 # Race condition in Hello world
+
+<!-- Presentation suggestion: live coding, multiple runs with different outcome -->
 
 ```c
 #include <stdio.h>
