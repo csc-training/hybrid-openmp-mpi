@@ -160,7 +160,8 @@ for(i=0; i < n; i++) {
       all
     - The sequence of work-sharing regions and barrier regions encountered
       must be same for all threads in team
-- Implicit barrier at the end of: `do`, `parallel`, `single`, `workshare`
+- Implicit barrier at the end of: `do`, `parallel`, `single`, `workshare` 
+  unless a `nowait` clause is specified
 
 
 # Execution control constructs
@@ -178,7 +179,7 @@ for(i=0; i < n; i++) {
 
 - Specifies that a regions should be executed only by a single (arbitrary)
   thread
-- Other threads wait (implicit barrier)
+- Other threads wait (implicit barrier) unless a `nowait` clause is specified
 
 
 # Execution control constructs
@@ -189,6 +190,7 @@ for(i=0; i < n; i++) {
 
 - A section that is executed by only one thread at a time
 - Unnamed critical sections are treated as the same section
+- No implicit barrier at the end
 
 
 # Execution control constructs
