@@ -212,7 +212,7 @@ extern int A[5];  // shared
 
 void do_things(int *var) {
   double wrk[10];  // private
-  static int status;
+  static int status; // shared
   ...
 }
 ```
