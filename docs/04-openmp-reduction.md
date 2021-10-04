@@ -171,6 +171,7 @@ for(i=0; i < n; i++) {
 - Specifies a region that should be executed only by the master thread
 - Note that there is no implicit barrier at end
 
+<br>
 
 `single`
   : `-`{.ghost}
@@ -217,7 +218,7 @@ for(i=0; i < n; i++) {
 !$OMP END PARALLEL
 ```
 
-# Example: initialization and output
+# Example: initialization and output (with bugs!)
 
 ```c
 int total = 0;
@@ -234,6 +235,30 @@ int total = 0;
 #pragma omp barrier
 #pragma omp critical(addup)
   total += sum;
+#pragma omp master
+  printf("Grand total is: %5.2f\n", total);
+}
+```
+
+
+# Example: initialization and output (correct)
+
+```c
+int total = 0;
+int new, sum;
+#pragma omp parallel shared(total) private(sum,new)
+{
+#pragma omp single
+  initialise();
+
+  sum = 0;
+  do {
+    new = compute_something();
+    sum += new;
+  } while (new);
+#pragma omp critical(addup)
+  total += sum;
+#pragma omp barrier
 #pragma omp master
   printf("Grand total is: %5.2f\n", total);
 }
