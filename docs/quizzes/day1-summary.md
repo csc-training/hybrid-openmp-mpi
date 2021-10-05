@@ -77,7 +77,8 @@ Correct: A,D
 
 
 6. What is the outcome of the following code snippet when run with 4 threads
-   ```fortran
+
+```
   integer :: i, prod, vec1(6), vec2(6)
 
   vec1 = 2
@@ -91,7 +92,7 @@ Correct: A,D
 !$omp end parallel do
 
   write(*,*) prod
-  ```
+```
 
    A. Code cannot be run with 4 threads as loop is not distributed evenly
    B. I do not know
