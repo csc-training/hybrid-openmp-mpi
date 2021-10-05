@@ -32,8 +32,22 @@ Correct: B, D
 
 Correct: D
 
+3. What `omp parallel` construct does?
 
-3. How is data visibilty defined
+   A. Distributes the following `for` / `do` loop to threads
+   B. Creates N threads
+   C. Instructs the compiler to parallelize following code block the best it can
+   D. Creates a parallel region which is executed by all the threads
+
+   A.
+   B.
+   C.
+   D.
+
+Correct: B, D
+
+
+4. How is data visibilty defined?
 
    A. All the threads share always all the data
    B. By set of default rules
@@ -45,10 +59,24 @@ Correct: D
    C.
    D.
 
-Correct: C
+Correct: B, C
+
+5. Where are the threads synchronized?
+
+   A. At the end of parallel region
+   B. At the end of `for` / `do` construct with `nowait` clause
+   C. At the end of `master` construct
+   D. At explicit `barrier` constructs
+  
+   A.
+   B.
+   C.
+   D.
+
+Correct: A,D
 
 
-4. What is the outcome of the following code snippet when run with 4 threads
+6. What is the outcome of the following code snippet when run with 4 threads
    ```fortran
   integer :: i, prod, vec1(6), vec2(6)
 
