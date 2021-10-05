@@ -47,7 +47,7 @@ Correct: D
 Correct: B, D
 
 
-4. How is data visibilty defined?
+4. How is data visibilty within a parallel region defined?
 
    A. All the threads share always all the data
    B. By set of default rules
