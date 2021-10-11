@@ -10,9 +10,9 @@ contains
 
     implicit none
 
-    type(field), intent(out) :: previous, current
+    type(field), intent(inout) :: previous, current
     integer, intent(out) :: nsteps
-    type(parallel_data), intent(out) :: parallel
+    type(parallel_data), intent(inout) :: parallel
 
     integer :: rows, cols
     logical :: using_input_file
